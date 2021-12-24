@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html>
+<title>Todo List</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+
+
+<!-- For nav bar-->
+<!-- jQuery library -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+<!-- Popper JS -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+
+<!-- Latest compiled JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<!-- For nav bar-->
+
+
+<body>
+
+<nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
+  <a class="navbar-brand" href="#">Todo List App</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <ul class="navbar-nav mr-auto ">
+
+       <li class="nav-item active">
+        {% comment %} <a class="nav-link" href="#">logout <span class="sr-only">(current)</span></a> {% endcomment %}
+         
+        <span class="nav-link" >{{user}}</span>
+      </li> 
+
+      <li class="nav-item" style="">
+      <h1 class="nav-item active" style="font-size:18px;">
+        <a class="nav-link" href="/logout">Logout</a>
+      </h1>
+      </li>
+
+      {% comment %} <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          Dropdown
+        </a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+          <a class="dropdown-item" href="#">Action</a>
+          <a class="dropdown-item" href="#">Another action</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="#">Something else here</a>
+        </div>
+      </li>
+
+      <li class="nav-item">
+        <a class="nav-link disabled" href="#">Disabled</a>
+      </li>
+    </ul> {% endcomment %}
+
+    
+
+   
+  </div>
+</nav>
+
+  <h3 style="text-align: center;margin-top:62px;">Your Recent Todo List 
+    <a href="/add" class="btn btn-success" style="margin-left:20px;width:100px;">Add</a><br>
+     <span class="w3-large">{{ checker}}</span>
+  </h3>
+  
+  {% comment %} <p style="text-align: center;">The site will only support 100 charactors per item</p> {% endcomment %}
+
+<!-- 1. search form start -->
+
+  <ul class="w3-ul w3-card-4">
+
+
+    <li class="w3-bar">
+    
+            <form action="{% url 'todolist_url' %}" method="post" >
+            {% csrf_token %}
+            <div class="container">
+            <div class="row" style="margin-top: 5px;">
+                    <div class="col-md-6" >
+                    <div class="md-form md-outline input-with-post-icon timepicker" twelvehour="true">
+
+                        <input name="search" required="" type="text" id="" class="form-control" placeholder="Search">
+                        <i class="fas fa-envelope input-prefix"></i>
+                    </div>
+                    </div>
+
+                    <div class="col-md-2">
+                    <div class="md-form md-outline input-with-post-icon timepicker" darktheme="true">
+                        
+                        <button class="form-control btn btn-primary">Search</button>
+                        {% comment %} <input name="tasktime" type="submitt" id="dark-version-example" class="form-control" placeholder="Select time"> {% endcomment %}
+                        <i class="fas fa-envelope  input-prefix"></i>
+                    </div>
+                    </div>
+
+                    <div class="col-md-2">
+                    <div class="md-form md-outline input-with-post-icon timepicker" darktheme="true">
+                        
+                        <a style="color:white" href="{% url 'deleteall_url' todo_delete_id.id %}" onclick="javascript:return confirm('Are You Sure want To delete all your todo list ');"
+                         class="form-control btn btn-danger">Delete all</a>
+                        {% comment %} <input name="tasktime" type="submitt" id="dark-version-example" class="form-control" placeholder="Select time"> {% endcomment %}
+                        <i class="fas fa-envelope  input-prefix"></i>
+                    </div>
+                    </div>
+
+                    <div class="col-md-2">
+                    <div class="md-form md-outline input-with-post-icon timepicker" darktheme="true">
+                        
+                        <a style="color:white" href="#completed" class="form-control btn btn-info">Completed List</a>
+                        {% comment %} <input name="tasktime" type="submitt" id="dark-version-example" class="form-control" placeholder="Select time"> {% endcomment %}
+                        <i class="fas fa-envelope  input-prefix"></i>
+                    </div>
+                    </div>
+
+
+                </div>
+            </div>
+
+            </form>
+            
+            
+    
+    </li>
+    <!-- 1. search form end -->
+
+    
+    
+
+
+    {% if not todo_high and not todo_medium and not todo_normal %}
+        <li class="w3-bar" >
+        <div class="w3-bar-item">
+        <span  class="w3-large" style="font-weight:bold;"> No result found...!
+        </span>
+        </div>
+        </li>
+       
+
+    {% endif %}
+
+
+    <!-- 1. list main start -  high_list-->
+    {% for high_list in  todo_high %}
+    <li class="w3-bar" >
+     
+      <div class="w3-bar-item">
+        <span class="w3-large" style="font-weight:bold;">{{ high_list.task}}
+        </span><br>
+        <span style="font-weight:bold;color:red;">{{ high_list.tasktimedate }}</span>
+        <span style="font-weight:bold;color:red;">| priority : {{ high_list.priority}}</span>
+      </div>
+
+       
+      <div id="control" class="w3-bar-item" style="float: right;">
+        <span class="w3-large"><a style="text-decoration: none;" href="{% url 'delete_url' high_list.u_id %}"
+        onclick="javascript:return confirm('Are you sure want To delete your todo list ');" >Delete</a></span>
+        <!-- <span>Web Designer</span> -->
+      </div>
+
+
+      <div id="control" class="w3-bar-item" style="float: right;">
+        <span class="w3-large"><a style="text-decoration: none;" href="{% url 'completed_url' high_list.u_id %}">Done</a></span>
+        <!-- <span>Web Designer</span> -->
+      </div>
+
+      <div id="control" class="w3-bar-item" style="float: right;">
+        <span class="w3-large"><a style="text-decoration: none;" href="{% url 'update_url' high_list.u_id %}">Edit</a></span>
+        <!-- <span>Web Designer</span> -->
+      </div>
+
+
+    </li>
+    {% endfor %}
+
+
+
+   <!--  <li class="w3-bar">
+      <span onclick="this.parentElement.style.display='none'" class="w3-bar-item w3-button w3-white w3-xlarge w3-right">×</span>
+      <img src="img_avatar5.png" class="w3-bar-item w3-circle w3-hide-small" style="width:85px">
+      <div class="w3-bar-item">
+        <span class="w3-large">Jill</span><br>
+        <span>Support</span>
+      </div>
+    </li>
+
+    <li class="w3-bar">
+      <span onclick="this.parentElement.style.display='none'" class="w3-bar-item w3-button w3-white w3-xlarge w3-right">×</span>
+      <img src="img_avatar6.png" class="w3-bar-item w3-circle w3-hide-small" style="width:85px">
+      <div class="w3-bar-item">
+        <span class="w3-large">Jane</span><br>
+        <span>Accountant</span>
+      </div>
+    </li> -->
+
+      <!-- list main start- high_list -->
+
+
+
+    <!--2. list main start -  medium_list-->
+    {% for medium_list in  todo_medium %}
+    <li class="w3-bar" style="">
+     
+      <div class="w3-bar-item">
+        <span class="w3-large" style="font-weight:bold;">{{ medium_list.task}}
+        </span><br>
+        <span style="font-weight:bold;color:blue;">{{ medium_list.tasktimedate }}</span>
+        <span style="font-weight:bold;color:blue;">| priority : {{ medium_list.priority}}</span>
+      </div>
+
+       
+      <div id="control" class="w3-bar-item" style="float: right;">
+        <span class="w3-large"><a style="text-decoration: none;" href="{% url 'delete_url' medium_list.u_id %}"
+        onclick="javascript:return confirm('Are you sure want To delete your todo list ');" >Delete</a></span>
+        <!-- <span>Web Designer</span> -->
+      </div>
+
+
+      <div id="control" class="w3-bar-item" style="float: right;">
+        <span class="w3-large"><a style="text-decoration: none;" href="{% url 'completed_url' medium_list.u_id %}">Done</a></span>
+        <!-- <span>Web Designer</span> -->
+      </div>
+
+      <div id="control" class="w3-bar-item" style="float: right;">
+        <span class="w3-large"><a style="text-decoration: none;" href="{% url 'update_url' medium_list.u_id %}">Edit</a></span>
+        <!-- <span>Web Designer</span> -->
+      </div>
+
+
+    </li>
+    {% endfor %}
+    <!-- list main end - medium_list-->
+
+
+    <!--3. list main start -  normal_list-->
+    {% for normal_list in  todo_normal%}
+    <li class="w3-bar" style="">
+     
+      <div class="w3-bar-item">
+        <span class="w3-large" style="font-weight:bold;">{{ normal_list.task}}
+        </span><br>
+        <span style="font-weight:bold;color:green;">{{ normal_list.tasktimedate }}</span>
+        <span style="font-weight:bold;color:green;">| priority : {{ normal_list.priority}}</span>
+      </div>
+
+       
+      <div id="control" class="w3-bar-item" style="float: right;">
+        <span class="w3-large"><a style="text-decoration: none;" href="{% url 'delete_url' normal_list.u_id %}"
+        onclick="javascript:return confirm('Are you sure want To delete your todo list ');" >Delete</a></span>
+        <!-- <span>Web Designer</span> -->
+      </div>
+
+
+      <div id="control" class="w3-bar-item" style="float: right;">
+        <span class="w3-large"><a style="text-decoration: none;" href="{% url 'completed_url' normal_list.u_id %}">Done</a></span>
+        <!-- <span>Web Designer</span> -->
+      </div>
+
+      <div id="control" class="w3-bar-item" style="float: right;">
+        <span class="w3-large"><a style="text-decoration: none;" href="{% url 'update_url' normal_list.u_id %}">Edit</a></span>
+        <!-- <span>Web Designer</span> -->
+      </div>
+
+
+    </li>
+    {% endfor %}
+    <!-- list main end - normal_list-->
+
+
+    {% if todo_completed %}
+    {% comment %} completed heading {% endcomment %}
+    <li class="w3-bar">
+
+      <div class="container">
+            <div class="row" style="margin-top: ;">
+
+                    <div class="col-md-12" >
+                    <div class="md-form md-outline input-with-post-icon timepicker" twelvehour="true">
+
+                        <h4 style="text-align:center;" class="" id="completed">Completed List</h4>
+                        
+                        <i class="fas fa-envelope input-prefix"></i>
+                    </div>
+                    </div>
+
+                   
+
+                    
+
+
+                </div>
+            </div>
+
+    </li>
+    {% endif %}
+
+
+    <!--4. list main start -  completed_list-->
+    {% for completed_list in  todo_completed%}
+    <li class="w3-bar" style="">
+     
+      <div class="w3-bar-item">
+        <span class="w3-large" style="font-weight:bold;">{{ completed_list.task}}
+        </span><br>
+        <span style="font-weight:bold;color:orange;">{{ completed_list.tasktimedate }}</span>
+        <span style="font-weight:bold;color:orange;">| priority : {{ completed_list.priority}}</span>
+      </div>
+
+       
+      <div id="control" class="w3-bar-item" style="float: right;">
+        <span class="w3-large"><a style="text-decoration: none;" href="{% url 'delete_url' completed_list.u_id %}"
+        onclick="javascript:return confirm('Are you sure want To delete your todo list ');" >Delete</a></span>
+        <!-- <span>Web Designer</span> -->
+      </div>
+
+
+      {% comment %} <div id="control" class="w3-bar-item" style="float: right;">
+        <span class="w3-large"><a style="text-decoration: none;" href="{% url 'completed_url' completed_list.u_id %}">Done</a></span>
+        <!-- <span>Web Designer</span> -->
+      </div> {% endcomment %}
+
+      {% comment %} <div id="control" class="w3-bar-item" style="float: right;">
+        <span class="w3-large"><a style="text-decoration: none;" href="{% url 'update_url' completed_list.u_id %}">Edit</a></span>
+        <!-- <span>Web Designer</span> -->
+      </div> {% endcomment %}
+
+
+    </li>
+    {% endfor %}
+    <!-- list main end - completed_list-->
+
+
+       {% if todo_high and todo_medium and todo_normal %}
+        {% comment %} <li class="w3-bar" >
+        <div class="w3-bar-item">
+        <span  class="w3-large" style="font-weight:bold;"> <a href="#" style="text-align:center;">go to top</a>
+        </span>
+        </div>
+        </li>  {% endcomment %}
+
+            <li class="w3-bar">
+
+      <div class="container">
+            <div class="row" style="margin-top: ;">
+
+                    <div class="col-md-12" >
+                    <div class="md-form md-outline input-with-post-icon timepicker" twelvehour="true">
+
+                        <h4 style="text-align:center;" class="" id="completed"><a href="#" style="text-decoration:none;"> Go to top</a></h4>
+                        
+                        
+                        <i class="fas fa-envelope input-prefix"></i>
+                    </div>
+                    </div>
+
+                   
+
+                    
+
+
+                </div>
+            </div>
+
+    </li>
+       
+
+    {% endif %}
+
+
+  </ul>
+</div>
+
+
+<style>
+            /*.sam{
+              font-size: 10px;
+              color: red;
+            }*/
+          
+  @media screen and (min-width: 425px){
+
+   /* #control{
+    color: red;
+    display:;
+
+
+    }*/
+
+   /* #textbox{
+      width: 100%;
+    }*/
+
+  }
+
+
+</style>
+
+<!-- for datetime picker -->
+    <script type="text/javascript">
+    	$(function(){
+    		// alert('hai');
+    		$('#datetimepicker').datetimepicker();
+    	})
+    </script>
+        <!-- for datetime picker -->
+
+</body>
+</html>

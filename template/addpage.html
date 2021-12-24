@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html>
+<title>Todo List</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+
+    <!-- for date time picker start -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/css/bootstrap-datetimepicker.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/js/bootstrap-datetimepicker.min.js"></script>
+    <!-- for date time picker start -->
+
+     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+
+<body>
+
+<div class="w3-container">  
+
+  {% comment %} <h3 style="text-align: center;">Add Your Todo List</h3>
+  <p style="text-align: center;">The site will only support 100 charactors per item</p> {% endcomment %}
+
+  <ul class="w3-ul w3-card-4">
+
+
+    <!-- Add section -->
+    <li class="w3-bar" style="display: flex;align-items: center;height: 100vh;">
+
+
+      <!--Form start ////////////////////////////-->
+      <form method="post" action="{% url 'add_url'   %}" style="margin: auto;"> 
+      {% csrf_token %}
+
+      <div class="w3-bar-item" >
+
+        <span class="w3-large">
+
+          <!-- <input id="textbox" required="" style="width: 100%;height: 56px;" type="textarea" name="" placeholder="Enter Your Data" autofocus> -->
+
+          <div class="input-group">
+         <!--  <div class="input-group-prepend">
+            <span class="input-group-text">With textarea</span>
+          </div> -->
+          {% comment %} <h3 style="text-align: center;">Add Your Todo List</h3> {% endcomment %}
+          <span  style="font-size: 15px;">The site will only support 100 charactors per item</span>
+          <textarea value="" name="taskdata" required autofocus="" placeholder="Enter your task" class="form-control" 
+          aria-label="With textarea">{{taskdata}}</textarea>
+          </div>
+          <span  style="font-size: 15px;color:red;">{{ checker }}</span><br>
+
+          {% comment %} <span style="font-size: 15px;">Select Date</span>
+
+          <input class="custom-select" required="" style="width: 100%;margin-top: 5px;" type="date" name="" placeholder="date">
+
+          <span style="font-size: 15px;">Select Time</span>
+          <input class="custom-select" required="" style="width: 100%;margin-top: 5px;" type="time" name="" placeholder="time"> {% endcomment %}
+
+          <span  style="font-size: 15px;">Select Date and Time</span>
+
+          
+            <div class="form-group">
+                <div class='input-group date' id='datetimepicker'>
+                    <input value="{{ datetime }}" name="datetime" required type='text' class="form-control"  />
+                    <span class="input-group-addon">
+                            <span class="glyphicon glyphicon-calendar"></span>
+                    </span>
+                </div>
+            </div>
+
+        
+
+          {% comment %} <input class="form-control" required="" style="width: 100%;margin-top: 5px;" type="date" name="" id="picker">
+
+
+          <div class="row" style="margin-top: 5px;">
+              <div class="col-md-7" >
+              <div class="md-form md-outline input-with-post-icon timepicker" twelvehour="true">
+                <label style="font-size: 14px;" for="light-version-examples">Select Date</label>
+
+                <input name="taskdate" type="date" id="light-version-examples" class="form-control" placeholder="Select time">
+                <i class="fas fa-envelope input-prefix"></i>
+              </div>
+            </div>
+
+            <div class="col-md-5">
+              <div class="md-form md-outline input-with-post-icon timepicker" darktheme="true">
+                <label style="font-size: 14px;" for="dark-version-example">Select Time</label>
+                
+                <input name="tasktime" type="time" id="dark-version-example" class="form-control" placeholder="Select time">
+                <i class="fas fa-envelope  input-prefix"></i>
+              </div>
+            </div>
+        </div> {% endcomment %}
+        
+
+          
+
+          <!-- <label for="cars">Choose a car:</label> -->
+
+        {% comment %} conditions depend on static value from form data using the help of context dictionary in add_view.py(elseif case ) {% endcomment %}
+          <select name="priority" required class="form-control"  style="width: 100%;margin-top: 5px;" id="priority">
+            {% if priority %}
+            <option value="{{priority}}">{{priority}}</option>
+            {% endif %}
+
+            {% if priority == 'Normal' %}
+            <option value="Medium">Medium</option>
+            <option value="High">High</option>
+
+            {% elif priority == 'Medium' %}
+            <option value="Normal">Normal</option>
+            <option value="High">High</option>
+            
+            {% elif priority == 'High' %}
+            <option value="Normal">Normal</option>
+            <option value="Medium">Medium</option>
+
+            {% else %}
+
+            <!--main selection option - all conditions false area  -->
+            <option selected disabled value="">-- select --</option>
+            <option value="Normal">Normal</option>
+            <option value="Medium">Medium</option>
+            <option value="High">High</option>
+            {% endif %}
+            
+          </select>
+
+
+
+          <button class="btn btn-success" style="width: 100%;margin-top: 50px;">Add</button>
+        </span><br>
+        <!-- <span>iuhuih</span> -->
+        <a href="/todolist" class="btn btn-success" style="width: 100%;margin-top: 20px;">Go to Todo List</a>
+
+      </div>
+
+       
+      <!-- <div id="control" class="w3-bar-item" style="float: ;"> -->
+
+        <!-- <button style="width: 193px;margin-top: 79px;">Add new</button> -->
+        <!-- <span class="w3-large"><a style="text-decoration: none;" href="">Delete</a></span> -->
+        <!-- <span>Web Designer</span> -->
+      <!-- </div> -->
+
+      </form>
+            <!--Form end ////////////////////////////-->
+
+
+      <!-- <div id="control" class="w3-bar-item" style="float: right;">
+        <span class="w3-large"><a style="text-decoration: none;" href="">Completed</a></span>
+      </div>
+
+      <div id="control" class="w3-bar-item" style="float: right;">
+        <span class="w3-large"><a style="text-decoration: none;" href="">Edit</a></span>
+      </div> -->
+
+
+    </li>
+    <!-- add section end -->
+
+
+
+    
+
+
+  </ul>
+</div>
+
+
+<style>
+            /*.sam{
+              font-size: 10px;
+              color: red;
+            }*/
+          
+  @media screen and (min-width: 425px){
+
+   /* #control{
+    color: red;
+    display:;
+
+
+    }*/
+
+   /* #textbox{
+      width: 100%;
+    }*/
+
+  }
+
+
+</style>
+
+<!-- for datetime picker -->
+    <script type="text/javascript">
+    	$(function(){
+    		// alert('hai');
+    		$('#datetimepicker').datetimepicker();
+    	})
+    </script>
+        <!-- for datetime picker -->
+
+</body>
+</html>
