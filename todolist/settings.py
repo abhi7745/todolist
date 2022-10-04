@@ -14,6 +14,9 @@ from pathlib import Path
 
 import os # for 'template' setup
 
+# for heroku hosting
+import django_heroku
+
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__))) # for 'template' setup 
 
 PROJECT_DIR=os.path.abspath(os.path.dirname(__file__)) # for 'static' folder setup
@@ -29,7 +32,7 @@ PROJECT_DIR=os.path.abspath(os.path.dirname(__file__)) # for 'static' folder set
 SECRET_KEY = 'f$2z08gk8$tz=dze1zwc2q6=7f9x*5kff*s9zvy&sm2$%s-r03'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = []
 
@@ -132,3 +135,11 @@ STATIC_URL = '/static/'
 
 SUPER_DIR=os.path.abspath(os.path.join(PROJECT_DIR,os.path.pardir))# for 'static' folder setup
 STATICFILES_DIRS=(os.path.join(SUPER_DIR,'static'),)# for 'static' folder setup
+
+
+
+# for hosting heroku (all files will dumb to static)
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+
+# Activate Django-Heroku. datatabase operation loader
+django_heroku.settings(locals())
